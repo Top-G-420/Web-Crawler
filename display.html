@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scraped Articles Dashboard</title>
+    <!-- DataTables CSS CDN -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <!-- Optional: For responsive design -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #table-container { margin-top: 20px; }
+        .error { color: red; padding: 10px; }
+        .loading { color: blue; padding: 10px; }
+        h1 { color: #333; }
+    </style>
+</head>
+<body>
+    <h1>Scraped Articles Table</h1>
+    <div id="status" class="loading">Loading data...</div>
+    <div id="table-container">
+        <table id="articlesTable" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Site URL</th>
+                    <th>Article URL</th>
+                    <th>Title</th>
+                    <th>Publish Date</th>
+                    <th>Keyword Category</th>
+                    <th>Summary Snippet</th>
+                    <th>Full Text</th>
+                    <th>Entities</th>
+                    <th>Sentiment</th>
+                    <th>Sentiment Score</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <!-- jQuery CDN (required for DataTables) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- DataTables JS CDN -->
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <!-- Optional: Responsive extension -->
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            const apiUrl = '/api/display';  // Adjust if your Vercel domain has a custom path
+
+            $.ajax({
+                url: apiUrl,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    $('#status').removeClass('loading').text(`Loaded ${response.total_rows} rows successfully.`);
+
+                    if (response.data && response.data.length > 0) {
+                        // Initialize DataTable with the data
+                        $('#articlesTable').DataTable({
+                            data: response.data,
+                            columns: [
+                                { data: 'id' },
+                                { data: 'site_url' },
+                                { data: 'article_url', render: function(data, type, row) {
+                                    return type === 'display' ? `<a href="${data}" target="_blank">${data}</a>` : data;
+                                }},
+                                { data: 'title' },
+                                { data: 'publish_date' },
+                                { data: 'keyword_category' },
+                                { data: 'summary_snippet' },
+                                { data: 'full_text' },
+                                { data: 'entities' },
+                                { data: 'sentiment' },
+                                { data: 'sentiment_score' },
+                                { data: 'created_at' }
+                            ],
+                            pageLength: 25,  // Show 25 rows per page
+                            responsive: true,  // Mobile-friendly
+                            searching: true,
+                            ordering: true,
+                            info: true,
+                            lengthChange: true
+                        });
+                    } else {
+                        $('#status').addClass('error').text('No data available.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $('#status').removeClass('loading').addClass('error').text(`Error fetching data: ${error} (Status: ${status}). Check Vercel logs or API endpoint.`);
+                    console.error('AJAX Error:', xhr.responseText);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
