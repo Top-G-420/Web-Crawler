@@ -1,0 +1,11 @@
+pandas
+selenium
+webdriver-manager
+newspaper3k
+nltk
+beautifulsoup4
+supabase
+transformers
+torch  # If needed for pipelines
+fastapi  # New dep for the wrapper
+uvicorn[standard]  # For ASGI
