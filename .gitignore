@@ -1,0 +1,13 @@
+# Secrets
+.env
+__pycache__/
+*.pyc
+.DS_Store
+
+# Logs and backups
+scraped_articles.csv
+*.log
+
+# IDE
+.idea/
+*.swp
