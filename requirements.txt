@@ -8,4 +8,8 @@ supabase
 transformers
 torch  # If needed for pipelines
 fastapi  # New dep for the wrapper
+
 uvicorn[standard]  # For ASGI
+
+supabase==2.4.0
+pandas==2.2.2
