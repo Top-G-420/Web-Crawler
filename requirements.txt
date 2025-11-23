@@ -1,15 +1,12 @@
-pandas
-selenium
-webdriver-manager
-newspaper3k
-nltk
-beautifulsoup4
-supabase
-transformers
-torch  # If needed for pipelines
-fastapi  # New dep for the wrapper
-
-uvicorn[standard]  # For ASGI
-
-supabase==2.4.0
-pandas==2.2.2
+Flask==3.0.3
+pandas==2.2.3
+selenium==4.25.0
+webdriver-manager==4.0.2
+newspaper3k==0.2.8
+nltk==3.8.1
+beautifulsoup4==4.12.3
+transformers==4.45.2
+torch==2.4.1
+supabase==2.7.4
+python-dotenv==1.0.1
+gunicorn==22.0.0  # Optional: For production (e.g., Heroku)
