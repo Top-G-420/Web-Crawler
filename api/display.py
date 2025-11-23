@@ -4,9 +4,9 @@ import json
 from supabase import create_client, Client
 import pandas as pd  # Optional: for better table formatting
 
-# Set up your Supabase credentials (env vars from Vercel override defaults)
+# Set up your Supabase credentials (env vars from Vercel)
 SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")  # No hardcoded default—use Vercel env var only!
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 # Validate env vars (optional: for debugging)
 if not SUPABASE_URL or not SUPABASE_KEY:
@@ -18,9 +18,8 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 # Table name based on your schema
 TABLE_NAME = 'scraped_articles'
 
-
 def handler(request):
-    # Fetch all rows from the table
+    # Fetch all rows from the table (add .limit(50) if too many rows)
     response = supabase.table(TABLE_NAME).select('*').execute()
 
     if response.data:
@@ -51,7 +50,7 @@ def handler(request):
         error_msg = "No data found in the table or an error occurred."
         if hasattr(response, 'error') and response.error:
             error_msg += f" Details: {response.error}"
-
+        
         return {
             'statusCode': 404,
             'headers': {'Content-Type': 'application/json'},
